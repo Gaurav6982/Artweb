@@ -1,0 +1,56 @@
+@extends('layouts.admin')
+@section('content')
+
+<div class="card">
+    <div class="card-header">
+        {{ trans('global.edit') }} {{ trans('cruds.highlightedSubCategory.title_singular') }}
+    </div>
+
+    <div class="card-body">
+        <form method="POST" action="{{ route("admin.highlighted-sub-categories.update", [$highlightedSubCategory->id]) }}" enctype="multipart/form-data">
+            @method('PUT')
+            @csrf
+            <div class="form-group">
+                <label class="required" for="sub_categories">{{ trans('cruds.highlightedSubCategory.fields.sub_categories') }}</label>
+                <div style="padding-bottom: 4px">
+                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                </div>
+                <select class="form-control select2 {{ $errors->has('sub_categories') ? 'is-invalid' : '' }}" name="sub_categories[]" id="sub_categories" multiple required>
+                    @foreach($sub_categories as $id => $sub_categories)
+                        <option value="{{ $id }}" {{ (in_array($id, old('sub_categories', [])) || $highlightedSubCategory->sub_categories->contains($id)) ? 'selected' : '' }}>{{ $sub_categories }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('sub_categories'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('sub_categories') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.highlightedSubCategory.fields.sub_categories_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="category_id">{{ trans('cruds.highlightedSubCategory.fields.category') }}</label>
+                <select class="form-control select2 {{ $errors->has('category') ? 'is-invalid' : '' }}" name="category_id" id="category_id" required>
+                    @foreach($categories as $id => $category)
+                        <option value="{{ $id }}" {{ (old('category_id') ? old('category_id') : $highlightedSubCategory->category->id ?? '') == $id ? 'selected' : '' }}>{{ $category }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('category'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('category') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.highlightedSubCategory.fields.category_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-danger" type="submit">
+                    {{ trans('global.save') }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@endsection

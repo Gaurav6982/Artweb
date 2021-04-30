@@ -1,0 +1,7 @@
+<<<<<<< Updated upstream
+*.sqlite
+*.sqlite-journal
+=======
+*.sqlite
+*.sqlite-journal
+>>>>>>> Stashed changes
